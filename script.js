@@ -168,8 +168,44 @@ document.addEventListener('DOMContentLoaded', () => {
             move(event.key);
         }
     });
+
+    // Add touch event listeners for swipe gestures
+    let touchStartX = 0;
+    let touchStartY = 0;
+    document.addEventListener('touchstart', event => {
+        touchStartX = event.touches[0].clientX;
+        touchStartY = event.touches[0].clientY;
+    });
+
+    document.addEventListener('touchmove', event => {
+        event.preventDefault(); // Prevent scrolling
+    });
+
+    document.addEventListener('touchend', event => {
+        const touchEndX = event.changedTouches[0].clientX;
+        const touchEndY = event.changedTouches[0].clientY;
+        const dx = touchEndX - touchStartX;
+        const dy = touchEndY - touchStartY;
+
+        // Determine the direction of swipe
+        if (Math.abs(dx) > Math.abs(dy)) {
+            if (dx > 0) {
+                move('ArrowRight');
+            } else {
+                move('ArrowLeft');
+            }
+        } else {
+            if (dy > 0) {
+                move('ArrowDown');
+            } else {
+                move('ArrowUp');
+            }
+        }
+    });
+
     document.getElementById('restart-btn').addEventListener('click', restartGame);
 
     initializeGame();
 
 });
+
